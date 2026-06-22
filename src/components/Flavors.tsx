@@ -1,83 +1,43 @@
 const flavors = [
   {
-    emoji: "🧈",
-    name: "Manteiga Clássica",
-    description: "O sabor tradicional que todo mundo ama, com manteiga real e sal na medida certa.",
-    price: "R$ 12,00",
-    badge: "Mais Pedido",
+    emoji: "🍿",
+    name: "Pipoca Simples",
+    description: "A clássica pipoca salgada, feita na hora com o tempero certo para agradar a todos.",
+    price: "R$ 10,00",
+    badge: "Mais Pedida",
     badgeColor: "bg-amber-500",
     bg: "bg-amber-50",
     border: "border-amber-200",
   },
   {
-    emoji: "🍬",
-    name: "Caramelo Crocante",
-    description: "Pipoca envolta em caramelo artesanal dourado, crocante e deliciosa.",
-    price: "R$ 15,00",
+    emoji: "🧀",
+    name: "Pipoca com Queijo",
+    description: "Pipoca crocante coberta com queijo saboroso, irresistível a cada mordida.",
+    price: "R$ 13,00",
     badge: "Favorita",
     badgeColor: "bg-orange-500",
-    bg: "bg-orange-50",
-    border: "border-orange-200",
-  },
-  {
-    emoji: "🧀",
-    name: "Queijo Especial",
-    description: "Com blend exclusivo de queijos importados para um sabor intenso e irresistível.",
-    price: "R$ 14,00",
-    badge: null,
-    badgeColor: "",
     bg: "bg-yellow-50",
     border: "border-yellow-200",
   },
   {
+    emoji: "🥔",
+    name: "Batata",
+    description: "Batata crocante e sequinha, temperada com o toque especial da casa.",
+    price: "R$ 12,00",
+    badge: null,
+    badgeColor: "",
+    bg: "bg-orange-50",
+    border: "border-orange-200",
+  },
+  {
     emoji: "🍫",
-    name: "Chocolate Belga",
-    description: "Cobertura de chocolate belga 70% cacau sobre pipocas crocantes e salgadas.",
-    price: "R$ 16,00",
+    name: "Pipoca Doce",
+    description: "Pipoca coberta com chocolate — escolha entre chocolate branco ou chocolate ao leite.",
+    price: "R$ 15,00",
     badge: "Premium",
     badgeColor: "bg-amber-800",
     bg: "bg-amber-50",
     border: "border-amber-300",
-  },
-  {
-    emoji: "🌶️",
-    name: "Pimenta & Limão",
-    description: "A combinação perfeita de picante e azedo para os amantes de emoção.",
-    price: "R$ 13,00",
-    badge: "Novidade",
-    badgeColor: "bg-red-500",
-    bg: "bg-red-50",
-    border: "border-red-200",
-  },
-  {
-    emoji: "🥓",
-    name: "Bacon Defumado",
-    description: "Pedaços de bacon crocante com tempero defumado especial da casa.",
-    price: "R$ 15,00",
-    badge: null,
-    badgeColor: "",
-    bg: "bg-stone-50",
-    border: "border-stone-200",
-  },
-  {
-    emoji: "🍕",
-    name: "Pizza Margherita",
-    description: "Pipoca temperada com tomate, orégano e queijo, sabor de pizza autêntico.",
-    price: "R$ 14,00",
-    badge: "Top 3",
-    badgeColor: "bg-red-600",
-    bg: "bg-red-50",
-    border: "border-red-100",
-  },
-  {
-    emoji: "🌊",
-    name: "Sal Marinho",
-    description: "Simples e sofisticado. Pipocas levemente salgadas com flor de sal artesanal.",
-    price: "R$ 12,00",
-    badge: null,
-    badgeColor: "",
-    bg: "bg-blue-50",
-    border: "border-blue-100",
   },
 ];
 
@@ -93,8 +53,8 @@ export default function Flavors() {
             Nossos Sabores
           </h2>
           <p className="text-stone-500 text-lg max-w-xl mx-auto">
-            Mais de 20 sabores artesanais esperando por você. Cada um é feito
-            no momento do pedido para garantir máxima crocância.
+            Produtos artesanais feitos no momento do pedido para garantir
+            máxima crocância e sabor em cada embalagem.
           </p>
         </div>
 

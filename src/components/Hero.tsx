@@ -78,8 +78,8 @@ export default function Hero() {
             {[
               { emoji: "🧀", label: "Queijo", top: "0", right: "0" },
               { emoji: "🍫", label: "Chocolate", bottom: "0", left: "0" },
-              { emoji: "🌶️", label: "Picante", top: "50%", left: "-20px" },
-              { emoji: "🍬", label: "Caramelo", top: "50%", right: "-20px" },
+              { emoji: "🥔", label: "Batata", top: "50%", left: "-20px" },
+              { emoji: "🍿", label: "Simples", top: "50%", right: "-20px" },
             ].map((item) => (
               <div
                 key={item.label}
