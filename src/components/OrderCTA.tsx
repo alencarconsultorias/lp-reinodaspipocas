@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function OrderCTA() {
   const whatsappNumber = "5511999999999";
   const whatsappMessage = encodeURIComponent(
@@ -39,12 +41,12 @@ export default function OrderCTA() {
                 </svg>
                 Pedir pelo WhatsApp
               </a>
-              <a
-                href="#sabores"
+              <Link
+                href="/cardapio"
                 className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-white/10 text-white border-2 border-white/30 hover:border-white font-bold text-lg px-8 py-4 rounded-full transition-all"
               >
                 Ver Cardápio
-              </a>
+              </Link>
             </div>
 
             <p className="text-amber-100/50 text-sm mt-8">

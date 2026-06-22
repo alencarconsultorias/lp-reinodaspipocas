@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,12 +33,12 @@ export default function Header() {
                 {link.label}
               </a>
             ))}
-            <a
-              href="#contato"
+            <Link
+              href="/cardapio"
               className="bg-amber-400 hover:bg-amber-300 text-amber-900 font-bold px-5 py-2 rounded-full transition-colors"
             >
               Peça Agora
-            </a>
+            </Link>
           </nav>
 
           <button
@@ -67,13 +68,13 @@ export default function Header() {
               {link.label}
             </a>
           ))}
-          <a
-            href="#contato"
+          <Link
+            href="/cardapio"
             onClick={() => setMenuOpen(false)}
             className="block mt-4 bg-amber-400 hover:bg-amber-300 text-amber-900 font-bold px-5 py-2 rounded-full text-center transition-colors"
           >
             Peça Agora
-          </a>
+          </Link>
         </div>
       )}
     </header>
