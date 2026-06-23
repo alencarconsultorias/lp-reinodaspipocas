@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export default function OrderCTA() {
-  const whatsappNumber = "5511999999999";
+  const whatsappNumber = "5512988958766";
   const whatsappMessage = encodeURIComponent(
     "Olá! Vim pelo site e gostaria de fazer um pedido no Reino das Pipocas. 🍿"
   );
@@ -25,8 +25,8 @@ export default function OrderCTA() {
               <span className="text-amber-400">pipoca?</span>
             </h2>
             <p className="text-amber-100/80 text-lg mb-10 max-w-lg mx-auto">
-              Faça seu pedido agora pelo WhatsApp e receba em até 40 minutos.
-              Atendemos todos os dias, das 10h às 22h.
+              Faça seu pedido agora pelo WhatsApp.
+              Atendemos todos os dias, das 17h às 21h, exceto as Terças-feiras.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -50,11 +50,11 @@ export default function OrderCTA() {
             </div>
 
             <p className="text-amber-100/50 text-sm mt-8">
-              Segunda a Domingo · 10h às 22h · Entrega disponível na região
+              Segunda a Domingo, exceto Terças-feiras · 17h às 21h · <br></br>Entrega disponível em São José dos Campos e região.
             </p>
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }

@@ -15,7 +15,7 @@ export default function Hero() {
         <div>
           <div className="inline-flex items-center gap-2 bg-amber-400/20 border border-amber-400/40 rounded-full px-4 py-1.5 mb-6">
             <span className="text-amber-300 text-sm font-medium">
-              ✨ Pipocas Artesanais Gourmet
+              ✨ Pipocas
             </span>
           </div>
 
@@ -30,7 +30,7 @@ export default function Hero() {
           </h1>
 
           <p className="text-amber-100/80 text-lg sm:text-xl leading-relaxed mb-10 max-w-lg">
-            Pipocas artesanais com sabores únicos, feitas com ingredientes
+            Pipocas com sabores únicos, feitas com ingredientes
             frescos e muito amor. Cada grão, uma experiência inesquecível.
           </p>
 
@@ -51,9 +51,9 @@ export default function Hero() {
 
           <div className="mt-12 flex items-center gap-8">
             {[
-              { value: "20+", label: "Sabores" },
-              { value: "5★", label: "Avaliação" },
-              { value: "2k+", label: "Clientes Felizes" },
+              { value: "20k+", label: "Pipocas feitas" },
+              { value: "4.9★", label: "Avaliação" },
+              { value: "1k+", label: "Clientes Felizes" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="text-3xl font-black text-amber-400">

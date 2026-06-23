@@ -3,18 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 
-const WHATSAPP_NUMBER = "5511999999999";
+const WHATSAPP_NUMBER = "5512988958766";
 
 const products = [
-  {
-    id: "pipoca-simples",
-    emoji: "🍿",
-    name: "Pipoca Simples",
-    description: "A clássica pipoca salgada, feita na hora com o tempero certo.",
-    price: 10.0,
-    badge: "Mais Pedida",
-    badgeColor: "bg-amber-500",
-  },
   {
     id: "pipoca-queijo",
     emoji: "🧀",
@@ -23,6 +14,15 @@ const products = [
     price: 13.0,
     badge: "Favorita",
     badgeColor: "bg-orange-500",
+  },
+  {
+    id: "pipoca-simples",
+    emoji: "🍿",
+    name: "Pipoca Simples",
+    description: "A clássica pipoca salgada, feita na hora com o tempero certo.",
+    price: 10.0,
+    badge: null,
+    badgeColor: "",
   },
   {
     id: "batata",
@@ -163,9 +163,8 @@ export default function CardapioPage() {
           return (
             <div
               key={product.id}
-              className={`relative bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-200 ${
-                active ? "ring-2 ring-amber-400 shadow-amber-100 shadow-md" : ""
-              }`}
+              className={`relative bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-200 ${active ? "ring-2 ring-amber-400 shadow-amber-100 shadow-md" : ""
+                }`}
             >
               {/* Active accent bar */}
               {active && (
@@ -257,9 +256,8 @@ export default function CardapioPage() {
 
       {/* ── Sticky checkout bar ── */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 px-4 py-3 bg-white border-t border-stone-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300 ${
-          totalItems > 0 ? "translate-y-0" : "translate-y-full"
-        }`}
+        className={`fixed bottom-0 left-0 right-0 z-40 px-4 py-3 bg-white border-t border-stone-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300 ${totalItems > 0 ? "translate-y-0" : "translate-y-full"
+          }`}
       >
         <div className="max-w-2xl mx-auto">
           <button
@@ -291,9 +289,8 @@ export default function CardapioPage() {
       {/* ── Bottom drawer ── */}
       <div
         ref={drawerRef}
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out max-h-[90dvh] flex flex-col ${
-          drawerOpen ? "translate-y-0" : "translate-y-full"
-        }`}
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out max-h-[90dvh] flex flex-col ${drawerOpen ? "translate-y-0" : "translate-y-full"
+          }`}
       >
         {/* Drag handle */}
         <div className="flex flex-col items-center pt-3 pb-2 shrink-0">
@@ -342,11 +339,10 @@ export default function CardapioPage() {
                 <button
                   key={method.id}
                   onClick={() => setPayment(method.id)}
-                  className={`flex items-center gap-2 px-4 py-3.5 rounded-xl border-2 text-sm font-semibold transition-all touch-manipulation ${
-                    payment === method.id
-                      ? "border-amber-500 bg-amber-50 text-amber-900"
-                      : "border-stone-200 bg-white text-stone-500 active:border-amber-300"
-                  }`}
+                  className={`flex items-center gap-2 px-4 py-3.5 rounded-xl border-2 text-sm font-semibold transition-all touch-manipulation ${payment === method.id
+                    ? "border-amber-500 bg-amber-50 text-amber-900"
+                    : "border-stone-200 bg-white text-stone-500 active:border-amber-300"
+                    }`}
                 >
                   <span className="text-lg">{method.icon}</span>
                   {method.label}

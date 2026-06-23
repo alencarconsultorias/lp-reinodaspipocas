@@ -61,7 +61,7 @@ export default function Testimonials() {
             O que nossos clientes dizem
           </h2>
           <p className="text-stone-500 text-lg max-w-xl mx-auto">
-            Mais de 2.000 clientes satisfeitos. Veja o que eles têm a dizer
+            Mais de 1.000 clientes satisfeitos. Veja o que eles têm a dizer
             sobre a experiência Reino das Pipocas.
           </p>
         </div>

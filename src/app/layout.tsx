@@ -9,9 +9,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Reino das Pipocas | Pipocas Artesanais",
+  title: "Reino das Pipocas | A melhor pipoca da cidade",
   description:
-    "Descubra o sabor incrível das pipocas artesanais do Reino das Pipocas. Mais de 20 sabores irresistíveis feitos com ingredientes frescos e muito amor.",
+    "Descubra o sabor incrível do Reino das Pipocas. Vários sabores irresistíveis feitos com ingredientes frescos e muito amor.",
   keywords: "pipoca, pipoca artesanal, pipoca gourmet, pipoca sabores",
 };
 

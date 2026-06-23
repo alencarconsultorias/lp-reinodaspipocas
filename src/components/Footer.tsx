@@ -14,7 +14,7 @@ export default function Footer() {
               </span>
             </a>
             <p className="text-amber-200/60 text-sm leading-relaxed max-w-sm">
-              Pipocas artesanais gourmet feitas com ingredientes frescos e
+              Pipocas feitas com ingredientes frescos e
               muito amor. O sabor que você vai querer de novo e de novo.
             </p>
             <div className="flex gap-4 mt-6">
@@ -57,7 +57,7 @@ export default function Footer() {
               <li className="flex items-start gap-2">
                 <span className="text-amber-400 mt-0.5">📱</span>
                 <div>
-                  <div className="text-amber-100/80 text-sm">(11) 99999-9999</div>
+                  <div className="text-amber-100/80 text-sm">(12) 98895-8766</div>
                   <div className="text-amber-100/40 text-xs">WhatsApp disponível</div>
                 </div>
               </li>
@@ -70,14 +70,14 @@ export default function Footer() {
               <li className="flex items-start gap-2">
                 <span className="text-amber-400 mt-0.5">📍</span>
                 <div>
-                  <div className="text-amber-100/80 text-sm">São Paulo, SP</div>
+                  <div className="text-amber-100/80 text-sm">São José dos Campos, SP</div>
                   <div className="text-amber-100/40 text-xs">Entrega disponível na região</div>
                 </div>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-amber-400 mt-0.5">🕐</span>
                 <div>
-                  <div className="text-amber-100/80 text-sm">Seg - Dom: 10h às 22h</div>
+                  <div className="text-amber-100/80 text-sm">Seg - Dom: 17h às 21h,<br></br>exceto Terças-feiras</div>
                 </div>
               </li>
             </ul>

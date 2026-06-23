@@ -4,8 +4,8 @@ const flavors = [
     name: "Pipoca Simples",
     description: "A clássica pipoca salgada, feita na hora com o tempero certo para agradar a todos.",
     price: "R$ 10,00",
-    badge: "Mais Pedida",
-    badgeColor: "bg-amber-500",
+    badge: null,
+    badgeColor: "",
     bg: "bg-amber-50",
     border: "border-amber-200",
   },
@@ -13,7 +13,7 @@ const flavors = [
     emoji: "🧀",
     name: "Pipoca com Queijo",
     description: "Pipoca crocante coberta com queijo saboroso, irresistível a cada mordida.",
-    price: "R$ 13,00",
+    price: "R$ 18,00",
     badge: "Favorita",
     badgeColor: "bg-orange-500",
     bg: "bg-yellow-50",
@@ -23,7 +23,7 @@ const flavors = [
     emoji: "🥔",
     name: "Batata",
     description: "Batata crocante e sequinha, temperada com o toque especial da casa.",
-    price: "R$ 12,00",
+    price: "R$ 25,00",
     badge: null,
     badgeColor: "",
     bg: "bg-orange-50",
@@ -32,8 +32,8 @@ const flavors = [
   {
     emoji: "🍫",
     name: "Pipoca Doce",
-    description: "Pipoca coberta com chocolate — escolha entre chocolate branco ou chocolate ao leite.",
-    price: "R$ 15,00",
+    description: "Pipoca coberta com chocolate — escolha entre chocolate branco e/ou chocolate ao leite.",
+    price: "R$ 25,00",
     badge: "Premium",
     badgeColor: "bg-amber-800",
     bg: "bg-amber-50",
@@ -53,7 +53,7 @@ export default function Flavors() {
             Nossos Sabores
           </h2>
           <p className="text-stone-500 text-lg max-w-xl mx-auto">
-            Produtos artesanais feitos no momento do pedido para garantir
+            Produtos feitos no momento do pedido para garantir
             máxima crocância e sabor em cada embalagem.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function Flavors() {
 
         <div className="text-center mt-12">
           <p className="text-stone-400 text-sm mb-4">
-            Quer um sabor personalizado? Entre em contato!
+            Quer saber mais? Entrar em contato!
           </p>
           <a
             href="#contato"

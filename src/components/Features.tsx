@@ -15,7 +15,7 @@ const features = [
     icon: "🚀",
     title: "Entrega Rápida",
     description:
-      "Pediu, fizemos! Entregamos em até 40 minutos na sua porta, ainda quente e crocante. Disponível todos os dias, inclusive fins de semana.",
+      "Pediu, fizemos! Entregamos via Ifood, Uber ou 99 foods, ainda quente e crocante. Disponível todos os dias, inclusive fins de semana.",
   },
   {
     icon: "♻️",
@@ -65,8 +65,8 @@ export default function Features() {
 
         <div className="mt-20 bg-amber-400/10 border border-amber-400/30 rounded-3xl p-8 sm:p-12 grid sm:grid-cols-3 gap-8 text-center">
           {[
-            { number: "2019", label: "Fundada em", sub: "5 anos de história" },
-            { number: "50+", label: "Sabores criados", sub: "Sempre criando novos" },
+            { number: "2025", label: "Fundada em", sub: "1 ano de história" },
+            { number: "20k+", label: "Pipocas feitas", sub: "Sempre evoluindo" },
             { number: "4.9★", label: "Nota média", sub: "No Google e iFood" },
           ].map((stat) => (
             <div key={stat.label}>
