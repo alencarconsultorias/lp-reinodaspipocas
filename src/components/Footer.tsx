@@ -1,3 +1,7 @@
+import Image from "next/image";
+
+const VERSION = "v1.0.0";
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -84,13 +88,32 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-amber-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-amber-200/40 text-sm">
-            © {currentYear} Reino das Pipocas. Todos os direitos reservados.
-          </p>
-          <p className="text-amber-200/30 text-xs">
-            Feito com ❤️ e muito 🍿
-          </p>
+        <div className="border-t border-amber-800 pt-8 flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-amber-200/40 text-sm">
+              © {currentYear} Reino das Pipocas. Todos os direitos reservados.
+            </p>
+            <p className="text-amber-200/30 text-xs">
+              Feito com ❤️ e muito 🍿 &bull; {VERSION}
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <a
+              href="https://www.alencarconsultorias.com.br"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 opacity-50 hover:opacity-80 transition-opacity"
+            >
+              <span className="text-amber-200/50 text-xs">Produzido por</span>
+              <Image
+                src="/Logotipo Alencar Consultorias.png"
+                alt="Alencar Consultorias"
+                width={120}
+                height={36}
+                className="brightness-0 invert opacity-60"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

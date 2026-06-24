@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   description:
     "Descubra o sabor incrível do Reino das Pipocas. Vários sabores irresistíveis feitos com ingredientes frescos e muito amor.",
   keywords: "pipoca, pipoca artesanal, pipoca gourmet, pipoca sabores",
+  other: {
+    version: "1.0.0",
+  },
 };
 
 export default function RootLayout({
