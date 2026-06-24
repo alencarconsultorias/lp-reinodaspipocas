@@ -5,15 +5,67 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "5512988958766";
 
-const products = [
+type Size = { label: string; price: number };
+
+type Product = {
+  id: string;
+  emoji: string;
+  name: string;
+  description: string;
+  price?: number;
+  sizes?: Size[];
+  badge?: string | null;
+  badgeColor?: string;
+};
+
+type CartItem = {
+  product: Product;
+  size?: Size;
+  key: string;
+  qty: number;
+};
+
+const SIZES_PIPOCA_QUEIJO: Size[] = [
+  { label: "P", price: 6 },
+  { label: "M", price: 8 },
+  { label: "G", price: 10 },
+  { label: "GG", price: 15 },
+  { label: "Família", price: 18 },
+];
+
+const SIZES_QUEIJO_PURO: Size[] = [
+  { label: "P", price: 5 },
+  { label: "M", price: 6 },
+  { label: "G", price: 12 },
+];
+
+const SIZES_BATATA_CHOCOLATE: Size[] = [
+  { label: "Mini", price: 8 },
+  { label: "P", price: 10 },
+  { label: "M", price: 15 },
+  { label: "G", price: 18 },
+  { label: "GG", price: 20 },
+  { label: "Família", price: 25 },
+];
+
+const products: Product[] = [
   {
     id: "pipoca-queijo",
     emoji: "🧀",
     name: "Pipoca com Queijo",
     description: "Crocante, coberta com queijo saboroso, irresistível a cada mordida.",
-    price: 13.0,
+    sizes: SIZES_PIPOCA_QUEIJO,
     badge: "Favorita",
     badgeColor: "bg-orange-500",
+  },
+  {
+    id: "queijo-puro",
+    emoji: "🧀",
+    name: "Queijo Puro",
+    description: "Só queijo, sem pipoca — puro sabor derretido na medida certa.",
+    sizes: SIZES_QUEIJO_PURO,
+    badge: null,
+    badgeColor: "",
   },
   {
     id: "pipoca-simples",
@@ -29,7 +81,7 @@ const products = [
     emoji: "🥔",
     name: "Batata",
     description: "Crocante e sequinha, temperada com o toque especial da casa.",
-    price: 12.0,
+    sizes: SIZES_BATATA_CHOCOLATE,
     badge: null,
     badgeColor: "",
   },
@@ -38,7 +90,7 @@ const products = [
     emoji: "🍫",
     name: "Pipoca Doce",
     description: "Coberta com chocolate branco ou ao leite — escolha seu favorito.",
-    price: 15.0,
+    sizes: SIZES_BATATA_CHOCOLATE,
     badge: "Premium",
     badgeColor: "bg-amber-800",
   },
@@ -53,6 +105,10 @@ const paymentMethods = [
 
 function fmt(value: number) {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function sizedKey(productId: string, sizeLabel: string) {
+  return `${productId}|${sizeLabel}`;
 }
 
 const WhatsAppSVG = ({ className }: { className?: string }) => (
@@ -70,20 +126,35 @@ export default function CardapioPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
 
-  const cartItems = products.filter((p) => (quantities[p.id] ?? 0) > 0);
-  const totalItems = cartItems.reduce((sum, p) => sum + (quantities[p.id] ?? 0), 0);
-  const total = cartItems.reduce((sum, p) => sum + p.price * (quantities[p.id] ?? 0), 0);
+  const cartItems: CartItem[] = [];
+  for (const product of products) {
+    if (product.sizes) {
+      for (const size of product.sizes) {
+        const key = sizedKey(product.id, size.label);
+        const qty = quantities[key] ?? 0;
+        if (qty > 0) cartItems.push({ product, size, key, qty });
+      }
+    } else {
+      const qty = quantities[product.id] ?? 0;
+      if (qty > 0) cartItems.push({ product, key: product.id, qty });
+    }
+  }
 
-  // Lock body scroll when drawer is open
+  const totalItems = cartItems.reduce((sum, item) => sum + item.qty, 0);
+  const total = cartItems.reduce((sum, item) => {
+    const price = item.size ? item.size.price : (item.product.price ?? 0);
+    return sum + price * item.qty;
+  }, 0);
+
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [drawerOpen]);
 
-  function change(id: string, delta: number) {
+  function change(key: string, delta: number) {
     setQuantities((prev) => ({
       ...prev,
-      [id]: Math.max(0, (prev[id] ?? 0) + delta),
+      [key]: Math.max(0, (prev[key] ?? 0) + delta),
     }));
   }
 
@@ -92,9 +163,10 @@ export default function CardapioPage() {
       "🍿 *Novo Pedido — Reino das Pipocas*",
       "",
       "*Itens:*",
-      ...cartItems.map((p) => {
-        const qty = quantities[p.id];
-        return `• ${qty}x ${p.name} — ${fmt(p.price * qty)}`;
+      ...cartItems.map((item) => {
+        const price = item.size ? item.size.price : (item.product.price ?? 0);
+        const sizeStr = item.size ? ` (${item.size.label})` : "";
+        return `• ${item.qty}x ${item.product.name}${sizeStr} — ${fmt(price * item.qty)}`;
       }),
       "",
       `*Total: ${fmt(total)}*`,
@@ -151,94 +223,169 @@ export default function CardapioPage() {
       <div className="mt-14 bg-amber-900 px-4 pt-5 pb-6 text-center">
         <h1 className="text-2xl font-black text-white mb-1">Cardápio</h1>
         <p className="text-amber-200/70 text-sm">
-          Toque em <span className="font-bold text-amber-300">+</span> para adicionar itens ao pedido
+          Escolha o tamanho e toque em <span className="font-bold text-amber-300">+</span> para adicionar
         </p>
       </div>
 
       {/* ── Product list ── */}
       <main className="flex-1 max-w-2xl w-full mx-auto px-3 py-4 pb-36 space-y-3">
         {products.map((product) => {
-          const qty = quantities[product.id] ?? 0;
-          const active = qty > 0;
+          const isActive = product.sizes
+            ? product.sizes.some((s) => (quantities[sizedKey(product.id, s.label)] ?? 0) > 0)
+            : (quantities[product.id] ?? 0) > 0;
+
+          const activeSubtotal = product.sizes
+            ? product.sizes.reduce((sum, s) => {
+                const qty = quantities[sizedKey(product.id, s.label)] ?? 0;
+                return sum + qty * s.price;
+              }, 0)
+            : (quantities[product.id] ?? 0) * (product.price ?? 0);
+
+          const activeCount = product.sizes
+            ? product.sizes.reduce((sum, s) => sum + (quantities[sizedKey(product.id, s.label)] ?? 0), 0)
+            : (quantities[product.id] ?? 0);
+
           return (
             <div
               key={product.id}
-              className={`relative bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-200 ${active ? "ring-2 ring-amber-400 shadow-amber-100 shadow-md" : ""
-                }`}
+              className={`relative bg-white rounded-2xl overflow-hidden shadow-sm transition-all duration-200 ${isActive ? "ring-2 ring-amber-400 shadow-amber-100 shadow-md" : ""}`}
             >
-              {/* Active accent bar */}
-              {active && (
+              {isActive && (
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-400 rounded-l-2xl" />
               )}
 
-              <div className="flex items-center gap-4 px-4 py-4 pl-5">
-                {/* Emoji */}
-                <div className="text-4xl w-12 text-center shrink-0 select-none">
-                  {product.emoji}
-                </div>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-bold text-stone-800 text-base leading-tight">
-                      {product.name}
-                    </h3>
-                    {product.badge && (
-                      <span className={`${product.badgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-full`}>
-                        {product.badge}
-                      </span>
-                    )}
+              <div className={`px-4 py-4 ${product.sizes ? "pl-5" : "pl-5"}`}>
+                {/* Top row: emoji + name/description */}
+                <div className="flex items-start gap-4">
+                  <div className="text-4xl w-12 text-center shrink-0 select-none pt-0.5">
+                    {product.emoji}
                   </div>
-                  <p className="text-stone-400 text-xs mt-0.5 leading-relaxed line-clamp-2">
-                    {product.description}
-                  </p>
-                  <span className="text-amber-700 font-black text-lg mt-1 block">
-                    {fmt(product.price)}
-                  </span>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-bold text-stone-800 text-base leading-tight">
+                        {product.name}
+                      </h3>
+                      {product.badge && (
+                        <span className={`${product.badgeColor} text-white text-[10px] font-bold px-2 py-0.5 rounded-full`}>
+                          {product.badge}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-stone-400 text-xs mt-0.5 leading-relaxed line-clamp-2">
+                      {product.description}
+                    </p>
+
+                    {/* Single-price product: price + counter inline */}
+                    {!product.sizes && (() => {
+                      const qty = quantities[product.id] ?? 0;
+                      return (
+                        <div className="flex items-center justify-between mt-2">
+                          <span className="text-amber-700 font-black text-lg">
+                            {fmt(product.price ?? 0)}
+                          </span>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {qty > 0 ? (
+                              <>
+                                <button
+                                  onClick={() => change(product.id, -1)}
+                                  className="w-11 h-11 rounded-full bg-amber-100 active:bg-amber-200 text-amber-900 font-black text-xl flex items-center justify-center transition-colors touch-manipulation"
+                                  aria-label="Remover"
+                                >
+                                  −
+                                </button>
+                                <span className="w-7 text-center font-black text-stone-800 text-lg tabular-nums">
+                                  {qty}
+                                </span>
+                                <button
+                                  onClick={() => change(product.id, 1)}
+                                  className="w-11 h-11 rounded-full bg-amber-500 active:bg-amber-600 text-white font-black text-xl flex items-center justify-center transition-colors touch-manipulation"
+                                  aria-label="Adicionar"
+                                >
+                                  +
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                onClick={() => change(product.id, 1)}
+                                className="w-11 h-11 rounded-full bg-amber-500 active:bg-amber-600 text-white font-black text-2xl flex items-center justify-center transition-colors touch-manipulation shadow-sm"
+                                aria-label="Adicionar"
+                              >
+                                +
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
                 </div>
 
-                {/* Counter */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {qty > 0 ? (
-                    <>
-                      <button
-                        onClick={() => change(product.id, -1)}
-                        className="w-11 h-11 rounded-full bg-amber-100 active:bg-amber-200 text-amber-900 font-black text-xl flex items-center justify-center transition-colors touch-manipulation"
-                        aria-label="Remover"
-                      >
-                        −
-                      </button>
-                      <span className="w-7 text-center font-black text-stone-800 text-lg tabular-nums">
-                        {qty}
-                      </span>
-                      <button
-                        onClick={() => change(product.id, 1)}
-                        className="w-11 h-11 rounded-full bg-amber-500 active:bg-amber-600 text-white font-black text-xl flex items-center justify-center transition-colors touch-manipulation"
-                        aria-label="Adicionar"
-                      >
-                        +
-                      </button>
-                    </>
-                  ) : (
-                    <button
-                      onClick={() => change(product.id, 1)}
-                      className="w-11 h-11 rounded-full bg-amber-500 active:bg-amber-600 text-white font-black text-2xl flex items-center justify-center transition-colors touch-manipulation shadow-sm"
-                      aria-label="Adicionar"
-                    >
-                      +
-                    </button>
-                  )}
-                </div>
+                {/* Sizes grid for products with sizes */}
+                {product.sizes && (
+                  <div className="mt-3 border-t border-stone-100 pt-3 space-y-2">
+                    <p className="text-[11px] font-semibold text-stone-400 uppercase tracking-wide mb-1">
+                      Tamanho
+                    </p>
+                    {product.sizes.map((size) => {
+                      const key = sizedKey(product.id, size.label);
+                      const qty = quantities[key] ?? 0;
+                      return (
+                        <div key={size.label} className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg min-w-[3rem] text-center">
+                              {size.label}
+                            </span>
+                            <span className="text-amber-700 font-black text-sm">
+                              {fmt(size.price)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {qty > 0 ? (
+                              <>
+                                <button
+                                  onClick={() => change(key, -1)}
+                                  className="w-9 h-9 rounded-full bg-amber-100 active:bg-amber-200 text-amber-900 font-black text-lg flex items-center justify-center transition-colors touch-manipulation"
+                                  aria-label="Remover"
+                                >
+                                  −
+                                </button>
+                                <span className="w-6 text-center font-black text-stone-800 text-base tabular-nums">
+                                  {qty}
+                                </span>
+                                <button
+                                  onClick={() => change(key, 1)}
+                                  className="w-9 h-9 rounded-full bg-amber-500 active:bg-amber-600 text-white font-black text-lg flex items-center justify-center transition-colors touch-manipulation"
+                                  aria-label="Adicionar"
+                                >
+                                  +
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                onClick={() => change(key, 1)}
+                                className="w-9 h-9 rounded-full bg-amber-500 active:bg-amber-600 text-white font-black text-xl flex items-center justify-center transition-colors touch-manipulation shadow-sm"
+                                aria-label="Adicionar"
+                              >
+                                +
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Subtotal strip */}
-              {active && (
+              {isActive && (
                 <div className="bg-amber-50 px-5 py-2 flex items-center justify-between">
                   <span className="text-amber-700 text-xs font-medium">
-                    {qty} {qty === 1 ? "unidade" : "unidades"}
+                    {activeCount} {activeCount === 1 ? "unidade" : "unidades"}
                   </span>
                   <span className="text-amber-800 text-sm font-black">
-                    {fmt(product.price * qty)}
+                    {fmt(activeSubtotal)}
                   </span>
                 </div>
               )}
@@ -246,18 +393,16 @@ export default function CardapioPage() {
           );
         })}
 
-        {/* Empty state hint */}
         {totalItems === 0 && (
           <p className="text-center text-stone-400 text-sm pt-4">
-            Adicione itens para montar seu pedido 👆
+            Escolha um tamanho para montar seu pedido 👆
           </p>
         )}
       </main>
 
       {/* ── Sticky checkout bar ── */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-40 px-4 py-3 bg-white border-t border-stone-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300 ${totalItems > 0 ? "translate-y-0" : "translate-y-full"
-          }`}
+        className={`fixed bottom-0 left-0 right-0 z-40 px-4 py-3 bg-white border-t border-stone-100 shadow-[0_-4px_24px_rgba(0,0,0,0.08)] transition-transform duration-300 ${totalItems > 0 ? "translate-y-0" : "translate-y-full"}`}
       >
         <div className="max-w-2xl mx-auto">
           <button
@@ -289,15 +434,12 @@ export default function CardapioPage() {
       {/* ── Bottom drawer ── */}
       <div
         ref={drawerRef}
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out max-h-[90dvh] flex flex-col ${drawerOpen ? "translate-y-0" : "translate-y-full"
-          }`}
+        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-3xl shadow-2xl transition-transform duration-300 ease-out max-h-[90dvh] flex flex-col ${drawerOpen ? "translate-y-0" : "translate-y-full"}`}
       >
-        {/* Drag handle */}
         <div className="flex flex-col items-center pt-3 pb-2 shrink-0">
           <div className="w-10 h-1 bg-stone-200 rounded-full" />
         </div>
 
-        {/* Drawer header */}
         <div className="flex items-center justify-between px-5 pb-3 shrink-0">
           <h2 className="text-lg font-black text-stone-800">Resumo do Pedido</h2>
           <button
@@ -309,22 +451,27 @@ export default function CardapioPage() {
           </button>
         </div>
 
-        {/* Scrollable content */}
         <div className="overflow-y-auto flex-1 px-5 pb-6 space-y-5">
           {/* Items */}
           <div className="bg-stone-50 rounded-2xl p-4 space-y-3">
-            {cartItems.map((p) => (
-              <div key={p.id} className="flex items-center gap-3">
-                <span className="text-2xl w-8 text-center">{p.emoji}</span>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-stone-700">{p.name}</p>
-                  <p className="text-xs text-stone-400">{quantities[p.id]}x · {fmt(p.price)} cada</p>
+            {cartItems.map((item) => {
+              const price = item.size ? item.size.price : (item.product.price ?? 0);
+              return (
+                <div key={item.key} className="flex items-center gap-3">
+                  <span className="text-2xl w-8 text-center">{item.product.emoji}</span>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-stone-700">
+                      {item.product.name}
+                      {item.size && (
+                        <span className="text-stone-400 font-normal ml-1">({item.size.label})</span>
+                      )}
+                    </p>
+                    <p className="text-xs text-stone-400">{item.qty}x · {fmt(price)} cada</p>
+                  </div>
+                  <span className="font-black text-stone-800">{fmt(price * item.qty)}</span>
                 </div>
-                <span className="font-black text-stone-800">
-                  {fmt(p.price * quantities[p.id])}
-                </span>
-              </div>
-            ))}
+              );
+            })}
             <div className="border-t border-stone-200 pt-3 flex items-center justify-between">
               <span className="font-bold text-stone-600 text-sm">Total</span>
               <span className="font-black text-amber-700 text-xl">{fmt(total)}</span>
