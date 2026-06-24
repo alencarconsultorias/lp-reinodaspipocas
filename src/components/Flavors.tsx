@@ -3,7 +3,7 @@ const flavors = [
     emoji: "🍿",
     name: "Pipoca Simples",
     description: "A clássica pipoca salgada, feita na hora com o tempero certo para agradar a todos.",
-    price: "R$ 10,00",
+    sizes: "Mini · P · M · G · GG",
     badge: null,
     badgeColor: "",
     bg: "bg-amber-50",
@@ -13,7 +13,7 @@ const flavors = [
     emoji: "🧀",
     name: "Pipoca com Queijo",
     description: "Pipoca crocante coberta com queijo saboroso, irresistível a cada mordida.",
-    price: "R$ 18,00",
+    sizes: "P · M · G · GG",
     badge: "Favorita",
     badgeColor: "bg-orange-500",
     bg: "bg-yellow-50",
@@ -23,7 +23,7 @@ const flavors = [
     emoji: "🥔",
     name: "Batata",
     description: "Batata crocante e sequinha, temperada com o toque especial da casa.",
-    price: "R$ 25,00",
+    sizes: "Mini · P · M · G · GG",
     badge: null,
     badgeColor: "",
     bg: "bg-orange-50",
@@ -33,7 +33,7 @@ const flavors = [
     emoji: "🍫",
     name: "Pipoca Doce",
     description: "Pipoca coberta com chocolate — escolha entre chocolate branco e/ou chocolate ao leite.",
-    price: "R$ 25,00",
+    sizes: "Mini · P · M · G · GG",
     badge: "Premium",
     badgeColor: "bg-amber-800",
     bg: "bg-amber-50",
@@ -84,11 +84,11 @@ export default function Flavors() {
               </p>
 
               <div className="flex items-center justify-between">
-                <span className="text-amber-700 font-black text-xl">
-                  {flavor.price}
+                <span className="text-amber-600 font-semibold text-sm">
+                  {flavor.sizes}
                 </span>
                 <a
-                  href="#contato"
+                  href="/cardapio"
                   className="bg-amber-400 hover:bg-amber-500 text-amber-900 font-bold text-sm px-3 py-1.5 rounded-full transition-colors"
                 >
                   Pedir
