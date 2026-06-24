@@ -1,11 +1,4 @@
-import Link from "next/link";
-
 export default function OrderCTA() {
-  const whatsappNumber = "5512988958766";
-  const whatsappMessage = encodeURIComponent(
-    "Olá! Vim pelo site e gostaria de fazer um pedido no Reino das Pipocas. 🍿"
-  );
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
     <section className="py-24 bg-white">
@@ -29,11 +22,9 @@ export default function OrderCTA() {
               Atendemos todos os dias, das 17h às 21h, exceto as Terças-feiras.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex justify-center">
               <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/cardapio"
                 className="inline-flex items-center justify-center gap-3 bg-green-500 hover:bg-green-400 text-white font-bold text-lg px-8 py-4 rounded-full transition-all hover:scale-105 hover:shadow-xl shadow-green-500/30"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -41,12 +32,6 @@ export default function OrderCTA() {
                 </svg>
                 Pedir pelo WhatsApp
               </a>
-              <Link
-                href="/cardapio"
-                className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-white/10 text-white border-2 border-white/30 hover:border-white font-bold text-lg px-8 py-4 rounded-full transition-all"
-              >
-                Ver Cardápio
-              </Link>
             </div>
 
             <p className="text-amber-100/50 text-sm mt-8">
