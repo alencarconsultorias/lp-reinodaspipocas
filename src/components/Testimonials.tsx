@@ -1,7 +1,7 @@
 const testimonials = [
   {
     name: "Mariana Costa",
-    role: "Cliente desde 2021",
+    role: "Cliente desde 2025",
     avatar: "MC",
     avatarBg: "bg-pink-500",
     stars: 5,
@@ -9,7 +9,7 @@ const testimonials = [
   },
   {
     name: "Rafael Oliveira",
-    role: "Cliente desde 2022",
+    role: "Cliente desde 2025",
     avatar: "RO",
     avatarBg: "bg-blue-500",
     stars: 5,
@@ -17,7 +17,7 @@ const testimonials = [
   },
   {
     name: "Juliana Santos",
-    role: "Cliente desde 2020",
+    role: "Cliente desde 2025",
     avatar: "JS",
     avatarBg: "bg-purple-500",
     stars: 5,
@@ -25,7 +25,7 @@ const testimonials = [
   },
   {
     name: "Pedro Almeida",
-    role: "Cliente desde 2023",
+    role: "Cliente desde 2025",
     avatar: "PA",
     avatarBg: "bg-green-500",
     stars: 5,
@@ -33,7 +33,7 @@ const testimonials = [
   },
   {
     name: "Carla Mendes",
-    role: "Cliente desde 2021",
+    role: "Cliente desde 2025",
     avatar: "CM",
     avatarBg: "bg-orange-500",
     stars: 5,
@@ -41,7 +41,7 @@ const testimonials = [
   },
   {
     name: "Bruno Lima",
-    role: "Cliente desde 2022",
+    role: "Cliente desde 2025",
     avatar: "BL",
     avatarBg: "bg-teal-500",
     stars: 5,

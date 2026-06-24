@@ -12,12 +12,6 @@ const features = [
       "Cada embalagem é preparada artesanalmente, um lote por vez. Nada de linha de produção industrial — cada pipoca tem a atenção que merece.",
   },
   {
-    icon: "🚀",
-    title: "Entrega Rápida",
-    description:
-      "Pediu, fizemos! Entregamos via Ifood, Uber ou 99 foods, ainda quente e crocante. Disponível todos os dias, inclusive fins de semana.",
-  },
-  {
     icon: "♻️",
     title: "Embalagem Sustentável",
     description:
@@ -36,7 +30,7 @@ export default function Features() {
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
             O Melhor da Pipoca
             <br />
-            <span className="text-amber-400">Artesanal</span>
+            <span className="text-amber-400">Joseense</span>
           </h2>
           <p className="text-amber-100/70 text-lg max-w-xl mx-auto">
             No Reino das Pipocas, cada detalhe importa. Desde a escolha do
@@ -44,7 +38,40 @@ export default function Features() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Banner exclusivo — Entrega Rápida */}
+        <div className="mb-6 bg-amber-400/15 border border-amber-400/40 rounded-3xl p-8 sm:p-12 flex flex-col sm:flex-row items-center gap-8">
+          <div className="flex-shrink-0 text-7xl">🚀</div>
+          <div className="flex-1 text-center sm:text-left">
+            <h3 className="text-white font-black text-2xl sm:text-3xl mb-2">
+              Entrega Rápida
+            </h3>
+            <p className="text-amber-100/70 text-base leading-relaxed mb-6">
+              Pediu, fizemos! Entregamos via iFood ou 99 Food, ainda quente e
+              crocante. Disponível todos os dias, exceto as Terças-feiras.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a
+                href="https://www.ifood.com.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-[#ea1d2c] hover:bg-[#c7111e] text-white font-bold px-6 py-3 rounded-xl transition-colors"
+              >
+                <span>🛵</span> Pedir pelo iFood
+              </a>
+              <a
+                href="https://www.99app.com/99food"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-[#f9a61a] hover:bg-[#e09510] text-black font-bold px-6 py-3 rounded-xl transition-colors"
+              >
+                <span>🍔</span> Pedir pelo 99 Food
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Demais banners */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           {features.map((feature) => (
             <div
               key={feature.title}
