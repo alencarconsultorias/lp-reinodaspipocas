@@ -110,6 +110,7 @@ export default function Footer() {
                 alt="Alencar Consultorias"
                 width={120}
                 height={36}
+                style={{ width: "120px", height: "auto" }}
                 className="brightness-0 invert opacity-60"
               />
             </a>
