@@ -15,7 +15,7 @@ There are no tests in this project.
 
 ## Architecture
 
-This is a **Next.js 16 site** for "Reino das Pipocas" (an artisanal popcorn brand), using the App Router with React 19 and Tailwind CSS v4.
+This is a **Next.js 16 site** for "Reino das Pipocas" (a popcorn brand), using the App Router with React 19 and Tailwind CSS v4.
 
 ### Routes
 
