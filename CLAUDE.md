@@ -24,12 +24,17 @@ This is a **Next.js 16 site** for "Reino das Pipocas" (a popcorn brand), using t
 
 ### Products & pricing (defined in `/cardapio/page.tsx`)
 
-| Product | Price |
-|---|---|
-| Pipoca com Queijo | R$ 13,00 |
-| Pipoca Simples | R$ 10,00 |
-| Batata | R$ 12,00 |
-| Pipoca Doce | R$ 15,00 |
+Most products use **size-based pricing** defined as named constant arrays. Only Pipoca Simples has a single fixed price.
+
+| Product | Pricing model | Sizes / Price |
+|---|---|---|
+| Pipoca com Queijo | Sizes | P R$6 · M R$8 · G R$10 · GG R$15 · Família R$18 |
+| Queijo Puro | Sizes | P R$5 · M R$6 · G R$12 |
+| Pipoca Simples | Fixed | R$10 |
+| Batata | Sizes | Mini R$8 · P R$10 · M R$15 · G R$18 · GG R$20 · Família R$25 |
+| Pipoca Doce | Sizes + flavor | Same sizes as Batata — flavor must be chosen first (Chocolate Branco / Ao Leite / Mista) |
+
+Cart keys are namespaced: `productId|sizeLabel` for sized products, `productId|sizeLabel|flavor` for flavored products, bare `productId` for fixed-price products.
 
 ### Styling
 
@@ -37,10 +42,12 @@ Tailwind v4 with a custom amber-based brand palette defined in `src/app/globals.
 
 ### Navigation
 
-Landing page links between sections use anchor IDs (`#inicio`, `#sabores`, `#contato`). Smooth scrolling is enabled globally via `html { scroll-behavior: smooth }`. The `OrderCTA` section has two CTAs: direct WhatsApp link and a "Ver Cardápio" button linking to `/cardapio`.
+Landing page links between sections use anchor IDs (`#inicio`, `#sabores`, `#contato`). Smooth scrolling is enabled globally via `html { scroll-behavior: smooth }`. The `OrderCTA` section has a single CTA button ("Pedir pelo WhatsApp") that links to `/cardapio`.
 
 ### WhatsApp CTA
 
-The WhatsApp number `5512988958766` is set in two places:
-- `src/components/OrderCTA.tsx` — direct link with a generic pre-filled message
-- `src/app/cardapio/page.tsx` (`WHATSAPP_NUMBER` constant) — sends a formatted order summary built from the cart contents
+The WhatsApp number `5512988958766` is used only in `src/app/cardapio/page.tsx` (`WHATSAPP_NUMBER` constant) — sends a formatted order summary built from the cart contents. `OrderCTA.tsx` no longer has a direct WhatsApp link; it routes the user to `/cardapio` instead.
+
+### Delivery channels
+
+The `Features` section (`src/components/Features.tsx`) has a highlighted "Entrega Rápida" banner with direct links to iFood and 99 Food. Operating hours: todos os dias exceto Terças-feiras, 17h–21h.
