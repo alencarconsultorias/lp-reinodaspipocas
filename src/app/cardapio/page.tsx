@@ -14,6 +14,7 @@ type Product = {
   description: string;
   price?: number;
   sizes?: Size[];
+  flavors?: string[];
   badge?: string | null;
   badgeColor?: string;
 };
@@ -21,6 +22,7 @@ type Product = {
 type CartItem = {
   product: Product;
   size?: Size;
+  flavor?: string;
   key: string;
   qty: number;
 };
@@ -47,6 +49,8 @@ const SIZES_BATATA_CHOCOLATE: Size[] = [
   { label: "GG", price: 20 },
   { label: "Família", price: 25 },
 ];
+
+const CHOCOLATE_FLAVORS = ["Chocolate Branco", "Chocolate ao Leite", "Mista"];
 
 const products: Product[] = [
   {
@@ -89,8 +93,9 @@ const products: Product[] = [
     id: "pipoca-doce",
     emoji: "🍫",
     name: "Pipoca Doce",
-    description: "Coberta com chocolate branco ou ao leite — escolha seu favorito.",
+    description: "Coberta com chocolate — escolha entre Branco, Ao Leite ou Mista.",
     sizes: SIZES_BATATA_CHOCOLATE,
+    flavors: CHOCOLATE_FLAVORS,
     badge: "Premium",
     badgeColor: "bg-amber-800",
   },
@@ -111,6 +116,10 @@ function sizedKey(productId: string, sizeLabel: string) {
   return `${productId}|${sizeLabel}`;
 }
 
+function flavoredKey(productId: string, sizeLabel: string, flavor: string) {
+  return `${productId}|${sizeLabel}|${flavor}`;
+}
+
 const WhatsAppSVG = ({ className }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
@@ -119,6 +128,7 @@ const WhatsAppSVG = ({ className }: { className?: string }) => (
 
 export default function CardapioPage() {
   const [quantities, setQuantities] = useState<Record<string, number>>({});
+  const [selectedFlavors, setSelectedFlavors] = useState<Record<string, string>>({});
   const [payment, setPayment] = useState("");
   const [name, setName] = useState("");
   const [notes, setNotes] = useState("");
@@ -128,7 +138,15 @@ export default function CardapioPage() {
 
   const cartItems: CartItem[] = [];
   for (const product of products) {
-    if (product.sizes) {
+    if (product.sizes && product.flavors) {
+      for (const flavor of product.flavors) {
+        for (const size of product.sizes) {
+          const key = flavoredKey(product.id, size.label, flavor);
+          const qty = quantities[key] ?? 0;
+          if (qty > 0) cartItems.push({ product, size, flavor, key, qty });
+        }
+      }
+    } else if (product.sizes) {
       for (const size of product.sizes) {
         const key = sizedKey(product.id, size.label);
         const qty = quantities[key] ?? 0;
@@ -166,7 +184,8 @@ export default function CardapioPage() {
       ...cartItems.map((item) => {
         const price = item.size ? item.size.price : (item.product.price ?? 0);
         const sizeStr = item.size ? ` (${item.size.label})` : "";
-        return `• ${item.qty}x ${item.product.name}${sizeStr} — ${fmt(price * item.qty)}`;
+        const flavorStr = item.flavor ? ` · ${item.flavor}` : "";
+        return `• ${item.qty}x ${item.product.name}${sizeStr}${flavorStr} — ${fmt(price * item.qty)}`;
       }),
       "",
       `*Total: ${fmt(total)}*`,
@@ -231,18 +250,34 @@ export default function CardapioPage() {
       <main className="flex-1 max-w-2xl w-full mx-auto px-3 py-4 pb-36 space-y-3">
         {products.map((product) => {
           const isActive = product.sizes
-            ? product.sizes.some((s) => (quantities[sizedKey(product.id, s.label)] ?? 0) > 0)
+            ? product.sizes.some((s) => {
+                if (product.flavors) {
+                  return product.flavors.some((fl) => (quantities[flavoredKey(product.id, s.label, fl)] ?? 0) > 0);
+                }
+                return (quantities[sizedKey(product.id, s.label)] ?? 0) > 0;
+              })
             : (quantities[product.id] ?? 0) > 0;
 
           const activeSubtotal = product.sizes
             ? product.sizes.reduce((sum, s) => {
+                if (product.flavors) {
+                  return sum + product.flavors.reduce((fsum, fl) => {
+                    const qty = quantities[flavoredKey(product.id, s.label, fl)] ?? 0;
+                    return fsum + qty * s.price;
+                  }, 0);
+                }
                 const qty = quantities[sizedKey(product.id, s.label)] ?? 0;
                 return sum + qty * s.price;
               }, 0)
             : (quantities[product.id] ?? 0) * (product.price ?? 0);
 
           const activeCount = product.sizes
-            ? product.sizes.reduce((sum, s) => sum + (quantities[sizedKey(product.id, s.label)] ?? 0), 0)
+            ? product.sizes.reduce((sum, s) => {
+                if (product.flavors) {
+                  return sum + product.flavors.reduce((fsum, fl) => fsum + (quantities[flavoredKey(product.id, s.label, fl)] ?? 0), 0);
+                }
+                return sum + (quantities[sizedKey(product.id, s.label)] ?? 0);
+              }, 0)
             : (quantities[product.id] ?? 0);
 
           return (
@@ -324,14 +359,52 @@ export default function CardapioPage() {
                 {/* Sizes grid for products with sizes */}
                 {product.sizes && (
                   <div className="mt-3 border-t border-stone-100 pt-3 space-y-2">
+                    {/* Flavor selector for Pipoca Doce */}
+                    {product.flavors && (
+                      <div className="mb-3">
+                        <p className="text-[11px] font-semibold text-stone-400 uppercase tracking-wide mb-2">
+                          Tipo de Chocolate
+                        </p>
+                        <div className="flex gap-2 flex-wrap">
+                          {product.flavors.map((flavor) => (
+                            <button
+                              key={flavor}
+                              onClick={() =>
+                                setSelectedFlavors((prev) => ({ ...prev, [product.id]: flavor }))
+                              }
+                              className={`text-xs font-semibold px-3 py-1.5 rounded-full border-2 transition-colors touch-manipulation ${
+                                selectedFlavors[product.id] === flavor
+                                  ? "border-amber-500 bg-amber-500 text-white"
+                                  : "border-stone-200 bg-white text-stone-500 active:border-amber-300"
+                              }`}
+                            >
+                              {flavor}
+                            </button>
+                          ))}
+                        </div>
+                        {!selectedFlavors[product.id] && (
+                          <p className="text-[10px] text-amber-600 font-medium mt-1.5">
+                            Selecione o tipo de chocolate para adicionar
+                          </p>
+                        )}
+                      </div>
+                    )}
+
                     <p className="text-[11px] font-semibold text-stone-400 uppercase tracking-wide mb-1">
                       Tamanho
                     </p>
                     {product.sizes.map((size) => {
-                      const key = sizedKey(product.id, size.label);
-                      const qty = quantities[key] ?? 0;
+                      const flavor = product.flavors ? selectedFlavors[product.id] : undefined;
+                      const key = flavor
+                        ? flavoredKey(product.id, size.label, flavor)
+                        : sizedKey(product.id, size.label);
+                      const qty = flavor ? (quantities[key] ?? 0) : 0;
+                      const disabled = product.flavors && !flavor;
                       return (
-                        <div key={size.label} className="flex items-center justify-between">
+                        <div
+                          key={size.label}
+                          className={`flex items-center justify-between transition-opacity ${disabled ? "opacity-40" : ""}`}
+                        >
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-bold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-lg min-w-[3rem] text-center">
                               {size.label}
@@ -363,7 +436,7 @@ export default function CardapioPage() {
                               </>
                             ) : (
                               <button
-                                onClick={() => change(key, 1)}
+                                onClick={() => !disabled && change(key, 1)}
                                 className="w-9 h-9 rounded-full bg-amber-500 active:bg-amber-600 text-white font-black text-xl flex items-center justify-center transition-colors touch-manipulation shadow-sm"
                                 aria-label="Adicionar"
                               >
@@ -464,6 +537,9 @@ export default function CardapioPage() {
                       {item.product.name}
                       {item.size && (
                         <span className="text-stone-400 font-normal ml-1">({item.size.label})</span>
+                      )}
+                      {item.flavor && (
+                        <span className="text-stone-400 font-normal ml-1">· {item.flavor}</span>
                       )}
                     </p>
                     <p className="text-xs text-stone-400">{item.qty}x · {fmt(price)} cada</p>
